@@ -1,0 +1,647 @@
+<style>
+/* Scoped styles for Elementor widget */
+.elementor-3d-gallery {
+    /* Color palette */
+    --background: 222 84% 5%;
+    --foreground: 210 40% 98%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --card: 222 84% 5%;
+    --border: 217 33% 17%;
+    --primary: 263 70% 50%;
+    --primary-glow: 270 100% 70%;
+    --accent: 180 100% 50%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)), hsl(var(--muted)));
+    
+    /* Shadows */
+    --shadow-card: 0 10px 30px -10px hsl(var(--primary) / 0.3);
+    --shadow-glow: 0 0 40px hsl(var(--primary-glow) / 0.4);
+    --shadow-accent: 0 0 20px hsl(var(--accent) / 0.3);
+}
+
+.elementor-3d-gallery * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.elementor-3d-gallery {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background: var(--gradient-primary);
+}
+
+.elementor-3d-gallery .bg-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--muted)) 50%, hsl(var(--background)) 100%);
+}
+
+.elementor-3d-gallery .title-section {
+    position: relative;
+    z-index: 20;
+    text-align: center;
+    padding: 3rem 1rem 2rem;
+}
+
+.elementor-3d-gallery .title {
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: bold;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: elementor-float 3s ease-in-out infinite;
+}
+
+.elementor-3d-gallery .subtitle {
+    font-size: 1.25rem;
+    color: hsl(var(--muted-foreground));
+    margin-top: 1rem;
+}
+
+@keyframes elementor-float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.elementor-3d-gallery .slider-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60vh;
+    padding: 0 1rem;
+}
+
+@media (min-width: 768px) {
+    .elementor-3d-gallery .slider-container {
+        height: 70vh;
+    }
+}
+
+.elementor-3d-gallery .slider-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 1536px;
+    height: 100%;
+    perspective: 1000px;
+}
+
+.elementor-3d-gallery .slide {
+    position: absolute;
+    inset: 0;
+    transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.elementor-3d-gallery .slide.transitioning {
+    animation: elementor-slide-3d 0.6s ease-out;
+}
+
+@keyframes elementor-slide-3d {
+    0% { transform: scale(0.9) rotateY(10deg); }
+    50% { transform: scale(0.95) rotateY(5deg); }
+    100% { transform: scale(1) rotateY(0deg); }
+}
+
+.elementor-3d-gallery .slide-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 512px;
+    margin: 0 auto;
+}
+
+.elementor-3d-gallery .slide-card {
+    position: relative;
+    height: 100%;
+    background: var(--gradient-card);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    transition: all 0.5s ease;
+}
+
+.elementor-3d-gallery .slide-card:hover {
+    box-shadow: var(--shadow-glow);
+}
+
+.elementor-3d-gallery .slide-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s ease;
+}
+
+.elementor-3d-gallery .slide-card:hover .slide-image {
+    transform: scale(1.05);
+}
+
+.elementor-3d-gallery .slide-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, hsl(var(--background) / 0.8), transparent, transparent);
+}
+
+.elementor-3d-gallery .slide-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2rem;
+    text-align: center;
+    animation: elementor-slide-3d 0.6s ease-out;
+}
+
+.elementor-3d-gallery .slide-title {
+    font-size: 1.875rem;
+    font-weight: bold;
+    color: hsl(var(--foreground));
+    margin-bottom: 0.5rem;
+}
+
+.elementor-3d-gallery .slide-description {
+    font-size: 1.125rem;
+    color: hsl(var(--muted-foreground));
+}
+
+.elementor-3d-gallery .nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 30;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    background: hsl(var(--muted) / 0.8);
+    border: 1px solid hsl(var(--border) / 0.5);
+    color: hsl(var(--foreground));
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-glow);
+    transition: all 0.3s ease;
+}
+
+.elementor-3d-gallery .nav-button:hover {
+    box-shadow: var(--shadow-accent);
+    background: hsl(var(--muted));
+}
+
+.elementor-3d-gallery .nav-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.elementor-3d-gallery .nav-prev {
+    left: 1rem;
+}
+
+.elementor-3d-gallery .nav-next {
+    right: 1rem;
+}
+
+.elementor-3d-gallery .controls {
+    position: relative;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+    padding: 0 1rem;
+}
+
+.elementor-3d-gallery .play-button {
+    background: hsl(var(--card) / 0.5);
+    backdrop-filter: blur(8px);
+    border: 1px solid hsl(var(--border) / 0.5);
+    color: hsl(var(--foreground));
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.elementor-3d-gallery .play-button:hover {
+    box-shadow: var(--shadow-accent);
+}
+
+.elementor-3d-gallery .indicators {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.elementor-3d-gallery .indicator {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    background: hsl(var(--muted));
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.elementor-3d-gallery .indicator.active {
+    background: hsl(var(--primary));
+    box-shadow: var(--shadow-glow);
+    transform: scale(1.25);
+}
+
+.elementor-3d-gallery .indicator:hover:not(.active) {
+    background: hsl(var(--accent));
+}
+
+.elementor-3d-gallery .progress-bar {
+    position: relative;
+    z-index: 20;
+    margin: 2rem 1rem 0;
+}
+
+.elementor-3d-gallery .progress-bg {
+    width: 100%;
+    background: hsl(var(--muted));
+    border-radius: 9999px;
+    height: 0.25rem;
+    overflow: hidden;
+}
+
+.elementor-3d-gallery .progress-fill {
+    height: 100%;
+    background: var(--gradient-primary);
+    transition: all 0.3s ease;
+    border-radius: 9999px;
+}
+</style>
+
+<div class="elementor-3d-gallery" id="elementor3dGallery">
+    <div class="bg-gradient"></div>
+    
+    <div class="title-section">
+        <h1 class="title">3D Gallery</h1>
+        <p class="subtitle">Experience stunning landscapes in immersive 3D</p>
+    </div>
+
+    <div class="slider-container">
+        <div class="slider-wrapper" id="elementorSliderWrapper">
+            <!-- Slides will be dynamically generated -->
+        </div>
+
+        <button class="nav-button nav-prev" id="elementorPrevBtn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15,18 9,12 15,6"></polyline>
+            </svg>
+        </button>
+
+        <button class="nav-button nav-next" id="elementorNextBtn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9,18 15,12 9,6"></polyline>
+            </svg>
+        </button>
+    </div>
+
+    <div class="controls">
+        <button class="play-button" id="elementorPlayBtn">
+            <svg id="elementorPlayIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                <polygon points="5,3 19,12 5,21"></polygon>
+            </svg>
+            <svg id="elementorPauseIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="6" y="4" width="4" height="16"></rect>
+                <rect x="14" y="4" width="4" height="16"></rect>
+            </svg>
+            <span id="elementorPlayText">Pause</span>
+        </button>
+
+        <div class="indicators" id="elementorIndicators">
+            <!-- Indicators will be dynamically generated -->
+        </div>
+    </div>
+
+    <div class="progress-bar">
+        <div class="progress-bg">
+            <div class="progress-fill" id="elementorProgressFill"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    'use strict';
+    
+    // Namespace all variables and functions to avoid conflicts
+    const ElementorGallery = {
+        images: [
+            {
+                id: '1',
+                url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
+                title: 'Mountain Vista',
+                description: 'Breathtaking mountain landscape at sunset'
+            },
+            {
+                id: '2',
+                url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
+                title: 'Forest Path',
+                description: 'Serene forest trail surrounded by towering trees'
+            },
+            {
+                id: '3',
+                url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
+                title: 'Ocean Waves',
+                description: 'Crystal clear waters meeting pristine beach'
+            },
+            {
+                id: '4',
+                url: 'https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
+                title: 'Lake Reflection',
+                description: 'Perfect mirror reflection on a calm lake'
+            },
+            {
+                id: '5',
+                url: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
+                title: 'Desert Dunes',
+                description: 'Golden sand dunes under dramatic sky'
+            }
+        ],
+
+        currentIndex: 0,
+        isPlaying: true,
+        isTransitioning: false,
+        autoPlayInterval: null,
+
+        // DOM elements
+        sliderWrapper: null,
+        prevBtn: null,
+        nextBtn: null,
+        playBtn: null,
+        playIcon: null,
+        pauseIcon: null,
+        playText: null,
+        indicators: null,
+        progressFill: null,
+
+        init: function() {
+            // Get DOM elements
+            this.sliderWrapper = document.getElementById('elementorSliderWrapper');
+            this.prevBtn = document.getElementById('elementorPrevBtn');
+            this.nextBtn = document.getElementById('elementorNextBtn');
+            this.playBtn = document.getElementById('elementorPlayBtn');
+            this.playIcon = document.getElementById('elementorPlayIcon');
+            this.pauseIcon = document.getElementById('elementorPauseIcon');
+            this.playText = document.getElementById('elementorPlayText');
+            this.indicators = document.getElementById('elementorIndicators');
+            this.progressFill = document.getElementById('elementorProgressFill');
+
+            this.createSlides();
+            this.createIndicators();
+            this.bindEvents();
+            this.startAutoPlay();
+        },
+
+        getSlideStyle: function(index) {
+            const diff = index - this.currentIndex;
+            const absOffset = Math.abs(diff);
+            
+            if (absOffset === 0) {
+                return {
+                    transform: 'translateX(0%) rotateY(0deg) scale(1)',
+                    zIndex: 10,
+                    opacity: 1,
+                };
+            } else if (absOffset === 1) {
+                const translateX = diff > 0 ? '60%' : '-60%';
+                const rotateY = diff > 0 ? '-45deg' : '45deg';
+                return {
+                    transform: `translateX(${translateX}) rotateY(${rotateY}) scale(0.8)`,
+                    zIndex: 5,
+                    opacity: 0.7,
+                };
+            } else if (absOffset === 2) {
+                const translateX = diff > 0 ? '120%' : '-120%';
+                const rotateY = diff > 0 ? '-60deg' : '60deg';
+                return {
+                    transform: `translateX(${translateX}) rotateY(${rotateY}) scale(0.6)`,
+                    zIndex: 1,
+                    opacity: 0.4,
+                };
+            } else {
+                return {
+                    transform: 'translateX(200%) rotateY(-90deg) scale(0.4)',
+                    zIndex: 0,
+                    opacity: 0,
+                };
+            }
+        },
+
+        createSlides: function() {
+            this.images.forEach((image, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'slide';
+                slide.setAttribute('data-index', index);
+                
+                const slideStyle = this.getSlideStyle(index);
+                Object.assign(slide.style, slideStyle);
+                
+                slide.innerHTML = `
+                    <div class="slide-inner">
+                        <div class="slide-card">
+                            <img src="${image.url}" alt="${image.title}" class="slide-image" loading="lazy">
+                            <div class="slide-overlay"></div>
+                            ${index === this.currentIndex ? `
+                                <div class="slide-info">
+                                    <h3 class="slide-title">${image.title}</h3>
+                                    <p class="slide-description">${image.description}</p>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+                
+                slide.addEventListener('click', () => this.goToSlide(index));
+                this.sliderWrapper.appendChild(slide);
+            });
+        },
+
+        createIndicators: function() {
+            this.images.forEach((_, index) => {
+                const indicator = document.createElement('button');
+                indicator.className = `indicator ${index === this.currentIndex ? 'active' : ''}`;
+                indicator.addEventListener('click', () => this.goToSlide(index));
+                this.indicators.appendChild(indicator);
+            });
+        },
+
+        updateSlides: function() {
+            const slides = this.sliderWrapper.querySelectorAll('.slide');
+            slides.forEach((slide, index) => {
+                const slideStyle = this.getSlideStyle(index);
+                Object.assign(slide.style, slideStyle);
+                
+                // Update slide info
+                const slideInfo = slide.querySelector('.slide-info');
+                if (index === this.currentIndex && !slideInfo) {
+                    const image = this.images[index];
+                    slide.querySelector('.slide-card').insertAdjacentHTML('beforeend', `
+                        <div class="slide-info">
+                            <h3 class="slide-title">${image.title}</h3>
+                            <p class="slide-description">${image.description}</p>
+                        </div>
+                    `);
+                } else if (index !== this.currentIndex && slideInfo) {
+                    slideInfo.remove();
+                }
+            });
+
+            // Update indicators
+            const indicatorElements = this.indicators.querySelectorAll('.indicator');
+            indicatorElements.forEach((indicator, index) => {
+                indicator.className = `indicator ${index === this.currentIndex ? 'active' : ''}`;
+            });
+
+            // Update progress
+            this.progressFill.style.width = `${((this.currentIndex + 1) / this.images.length) * 100}%`;
+        },
+
+        nextSlide: function() {
+            if (this.isTransitioning) return;
+            this.isTransitioning = true;
+            
+            const currentSlide = this.sliderWrapper.querySelector(`.slide[data-index="${this.currentIndex}"]`);
+            currentSlide.classList.add('transitioning');
+            
+            this.currentIndex = (this.currentIndex + 1) % this.images.length;
+            this.updateSlides();
+            
+            setTimeout(() => {
+                currentSlide.classList.remove('transitioning');
+                this.isTransitioning = false;
+            }, 600);
+        },
+
+        prevSlide: function() {
+            if (this.isTransitioning) return;
+            this.isTransitioning = true;
+            
+            const currentSlide = this.sliderWrapper.querySelector(`.slide[data-index="${this.currentIndex}"]`);
+            currentSlide.classList.add('transitioning');
+            
+            this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+            this.updateSlides();
+            
+            setTimeout(() => {
+                currentSlide.classList.remove('transitioning');
+                this.isTransitioning = false;
+            }, 600);
+        },
+
+        goToSlide: function(index) {
+            if (this.isTransitioning || index === this.currentIndex) return;
+            this.isTransitioning = true;
+            
+            const currentSlide = this.sliderWrapper.querySelector(`.slide[data-index="${this.currentIndex}"]`);
+            currentSlide.classList.add('transitioning');
+            
+            this.currentIndex = index;
+            this.updateSlides();
+            
+            setTimeout(() => {
+                currentSlide.classList.remove('transitioning');
+                this.isTransitioning = false;
+            }, 600);
+        },
+
+        togglePlayPause: function() {
+            this.isPlaying = !this.isPlaying;
+            
+            if (this.isPlaying) {
+                this.playIcon.style.display = 'none';
+                this.pauseIcon.style.display = 'block';
+                this.playText.textContent = 'Pause';
+                this.startAutoPlay();
+            } else {
+                this.playIcon.style.display = 'block';
+                this.pauseIcon.style.display = 'none';
+                this.playText.textContent = 'Play';
+                this.stopAutoPlay();
+            }
+        },
+
+        startAutoPlay: function() {
+            if (this.autoPlayInterval) clearInterval(this.autoPlayInterval);
+            this.autoPlayInterval = setInterval(() => this.nextSlide(), 4000);
+        },
+
+        stopAutoPlay: function() {
+            if (this.autoPlayInterval) {
+                clearInterval(this.autoPlayInterval);
+                this.autoPlayInterval = null;
+            }
+        },
+
+        handleSwipe: function(touchStartX, touchEndX) {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    this.nextSlide();
+                } else {
+                    this.prevSlide();
+                }
+            }
+        },
+
+        bindEvents: function() {
+            // Button events
+            this.prevBtn.addEventListener('click', () => this.prevSlide());
+            this.nextBtn.addEventListener('click', () => this.nextSlide());
+            this.playBtn.addEventListener('click', () => this.togglePlayPause());
+
+            // Keyboard navigation
+            const keyHandler = (e) => {
+                if (e.key === 'ArrowLeft') this.prevSlide();
+                if (e.key === 'ArrowRight') this.nextSlide();
+                if (e.key === ' ') {
+                    e.preventDefault();
+                    this.togglePlayPause();
+                }
+            };
+            document.addEventListener('keydown', keyHandler);
+
+            // Touch/swipe support
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            this.sliderWrapper.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+
+            this.sliderWrapper.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                this.handleSwipe(touchStartX, touchEndX);
+            });
+        }
+    };
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            ElementorGallery.init();
+        });
+    } else {
+        ElementorGallery.init();
+    }
+})();
+</script>
