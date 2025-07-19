@@ -1,0 +1,484 @@
+<!-- Elementor 3D Image Slider Widget -->
+<!-- Copy this entire code into Elementor HTML Widget -->
+
+<style>
+    /* 3D Image Slider Styles */
+    .elementor-3d-slider * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .elementor-3d-slider {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+        border-radius: 15px;
+    }
+
+    .elementor-slider-container {
+        width: 100%;
+        max-width: 800px;
+        height: 500px;
+        position: relative;
+        perspective: 1000px;
+        padding: 20px;
+    }
+
+    .elementor-slider {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .elementor-slide {
+        position: absolute;
+        width: 300px;
+        height: 400px;
+        left: 50%;
+        top: 50%;
+        transform-origin: center center;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .elementor-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 20px;
+    }
+
+    .elementor-slide::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(0,0,0,0.1));
+        border-radius: 20px;
+        transition: opacity 0.3s;
+        opacity: 0;
+    }
+
+    .elementor-slide:hover::after {
+        opacity: 1;
+    }
+
+    .elementor-slide.active {
+        z-index: 10;
+        transform: translate(-50%, -50%) rotateY(0deg) scale(1.1);
+    }
+
+    .elementor-slide.prev {
+        z-index: 5;
+        transform: translate(-50%, -50%) rotateY(-45deg) translateZ(-200px) scale(0.8);
+        opacity: 0.7;
+    }
+
+    .elementor-slide.next {
+        z-index: 5;
+        transform: translate(-50%, -50%) rotateY(45deg) translateZ(-200px) scale(0.8);
+        opacity: 0.7;
+    }
+
+    .elementor-slide.far-prev {
+        z-index: 1;
+        transform: translate(-50%, -50%) rotateY(-90deg) translateZ(-400px) scale(0.6);
+        opacity: 0.4;
+    }
+
+    .elementor-slide.far-next {
+        z-index: 1;
+        transform: translate(-50%, -50%) rotateY(90deg) translateZ(-400px) scale(0.6);
+        opacity: 0.4;
+    }
+
+    .elementor-slide.hidden {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotateY(180deg) translateZ(-600px) scale(0.4);
+    }
+
+    .elementor-controls {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        z-index: 100;
+    }
+
+    .elementor-controls:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .elementor-prev-btn {
+        left: 20px;
+    }
+
+    .elementor-next-btn {
+        right: 20px;
+    }
+
+    .elementor-dots-container {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+        z-index: 100;
+    }
+
+    .elementor-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .elementor-dot.active {
+        background: white;
+        transform: scale(1.2);
+    }
+
+    .elementor-slide-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0,0,0,0.8));
+        color: white;
+        padding: 20px;
+        text-align: center;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.3s ease;
+    }
+
+    .elementor-slide.active .elementor-slide-info {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .elementor-slide-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .elementor-slide-description {
+        font-size: 14px;
+        opacity: 0.9;
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+        .elementor-slider-container {
+            height: 400px;
+            max-width: 100%;
+            padding: 10px;
+        }
+
+        .elementor-slide {
+            width: 250px;
+            height: 300px;
+        }
+
+        .elementor-controls {
+            width: 45px;
+            height: 45px;
+            font-size: 18px;
+        }
+
+        .elementor-prev-btn {
+            left: 10px;
+        }
+
+        .elementor-next-btn {
+            right: 10px;
+        }
+
+        .elementor-slide-title {
+            font-size: 16px;
+        }
+
+        .elementor-slide-description {
+            font-size: 12px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .elementor-3d-slider {
+            min-height: 350px;
+        }
+        
+        .elementor-slider-container {
+            height: 350px;
+        }
+
+        .elementor-slide {
+            width: 200px;
+            height: 250px;
+        }
+
+        .elementor-slide.active {
+            transform: translate(-50%, -50%) rotateY(0deg) scale(1.05);
+        }
+
+        .elementor-controls {
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+        }
+    }
+</style>
+
+<div class="elementor-3d-slider">
+    <div class="elementor-slider-container">
+        <div class="elementor-slider" id="elementorSlider">
+            <div class="elementor-slide active">
+                <img src="https://picsum.photos/400/600?random=1" alt="Beautiful Landscape" loading="lazy">
+                <div class="elementor-slide-info">
+                    <div class="elementor-slide-title">Serene Mountain Lake</div>
+                    <div class="elementor-slide-description">A breathtaking view of crystal clear waters</div>
+                </div>
+            </div>
+            <div class="elementor-slide next">
+                <img src="https://picsum.photos/400/600?random=2" alt="Ocean Sunset" loading="lazy">
+                <div class="elementor-slide-info">
+                    <div class="elementor-slide-title">Golden Ocean Sunset</div>
+                    <div class="elementor-slide-description">Where the sea meets the endless sky</div>
+                </div>
+            </div>
+            <div class="elementor-slide far-next">
+                <img src="https://picsum.photos/400/600?random=3" alt="Forest Path" loading="lazy">
+                <div class="elementor-slide-info">
+                    <div class="elementor-slide-title">Mystic Forest Path</div>
+                    <div class="elementor-slide-description">Journey through ancient woodland</div>
+                </div>
+            </div>
+            <div class="elementor-slide hidden">
+                <img src="https://picsum.photos/400/600?random=4" alt="Desert Dunes" loading="lazy">
+                <div class="elementor-slide-info">
+                    <div class="elementor-slide-title">Golden Desert Dunes</div>
+                    <div class="elementor-slide-description">Endless beauty of shifting sands</div>
+                </div>
+            </div>
+            <div class="elementor-slide hidden">
+                <img src="https://picsum.photos/400/600?random=5" alt="City Lights" loading="lazy">
+                <div class="elementor-slide-info">
+                    <div class="elementor-slide-title">City Lights at Night</div>
+                    <div class="elementor-slide-description">Urban beauty under starlit skies</div>
+                </div>
+            </div>
+            <div class="elementor-slide hidden">
+                <img src="https://picsum.photos/400/600?random=6" alt="Autumn Forest" loading="lazy">
+                <div class="elementor-slide-info">
+                    <div class="elementor-slide-title">Autumn Forest Glory</div>
+                    <div class="elementor-slide-description">Nature's colorful transformation</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="elementor-controls elementor-prev-btn" onclick="elementorPreviousSlide()">❮</button>
+        <button class="elementor-controls elementor-next-btn" onclick="elementorNextSlide()">❯</button>
+
+        <div class="elementor-dots-container">
+            <div class="elementor-dot active" onclick="elementorCurrentSlide(0)"></div>
+            <div class="elementor-dot" onclick="elementorCurrentSlide(1)"></div>
+            <div class="elementor-dot" onclick="elementorCurrentSlide(2)"></div>
+            <div class="elementor-dot" onclick="elementorCurrentSlide(3)"></div>
+            <div class="elementor-dot" onclick="elementorCurrentSlide(4)"></div>
+            <div class="elementor-dot" onclick="elementorCurrentSlide(5)"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    // Elementor 3D Slider JavaScript
+    let elementorCurrentIndex = 0;
+    const elementorSlides = document.querySelectorAll('.elementor-slide');
+    const elementorDots = document.querySelectorAll('.elementor-dot');
+    const elementorTotalSlides = elementorSlides.length;
+    let elementorIsTransitioning = false;
+
+    // Touch/swipe functionality
+    let elementorStartX = 0;
+    let elementorEndX = 0;
+    const elementorSlider = document.getElementById('elementorSlider');
+
+    if (elementorSlider) {
+        elementorSlider.addEventListener('touchstart', handleElementorTouchStart, { passive: true });
+        elementorSlider.addEventListener('touchend', handleElementorTouchEnd, { passive: true });
+        elementorSlider.addEventListener('mousedown', handleElementorMouseStart);
+        elementorSlider.addEventListener('mouseup', handleElementorMouseEnd);
+    }
+
+    function handleElementorTouchStart(e) {
+        elementorStartX = e.touches[0].clientX;
+    }
+
+    function handleElementorTouchEnd(e) {
+        elementorEndX = e.changedTouches[0].clientX;
+        handleElementorSwipe();
+    }
+
+    function handleElementorMouseStart(e) {
+        elementorStartX = e.clientX;
+    }
+
+    function handleElementorMouseEnd(e) {
+        elementorEndX = e.clientX;
+        handleElementorSwipe();
+    }
+
+    function handleElementorSwipe() {
+        const threshold = 50;
+        const diff = elementorStartX - elementorEndX;
+
+        if (Math.abs(diff) > threshold) {
+            if (diff > 0) {
+                elementorNextSlide();
+            } else {
+                elementorPreviousSlide();
+            }
+        }
+    }
+
+    function updateElementorSlidePositions() {
+        elementorSlides.forEach((slide, index) => {
+            slide.className = 'elementor-slide';
+            const position = (index - elementorCurrentIndex + elementorTotalSlides) % elementorTotalSlides;
+            
+            switch(position) {
+                case 0:
+                    slide.classList.add('active');
+                    break;
+                case 1:
+                    slide.classList.add('next');
+                    break;
+                case 2:
+                    slide.classList.add('far-next');
+                    break;
+                case elementorTotalSlides - 1:
+                    slide.classList.add('prev');
+                    break;
+                case elementorTotalSlides - 2:
+                    slide.classList.add('far-prev');
+                    break;
+                default:
+                    slide.classList.add('hidden');
+            }
+        });
+
+        // Update dots
+        elementorDots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === elementorCurrentIndex);
+        });
+    }
+
+    // Global functions for button clicks
+    window.elementorNextSlide = function() {
+        if (elementorIsTransitioning) return;
+        elementorIsTransitioning = true;
+        elementorCurrentIndex = (elementorCurrentIndex + 1) % elementorTotalSlides;
+        updateElementorSlidePositions();
+        setTimeout(() => elementorIsTransitioning = false, 800);
+    }
+
+    window.elementorPreviousSlide = function() {
+        if (elementorIsTransitioning) return;
+        elementorIsTransitioning = true;
+        elementorCurrentIndex = (elementorCurrentIndex - 1 + elementorTotalSlides) % elementorTotalSlides;
+        updateElementorSlidePositions();
+        setTimeout(() => elementorIsTransitioning = false, 800);
+    }
+
+    window.elementorCurrentSlide = function(index) {
+        if (elementorIsTransitioning || index === elementorCurrentIndex) return;
+        elementorIsTransitioning = true;
+        elementorCurrentIndex = index;
+        updateElementorSlidePositions();
+        setTimeout(() => elementorIsTransitioning = false, 800);
+    }
+
+    // Auto-slide functionality
+    let elementorAutoSlideInterval;
+
+    function startElementorAutoSlide() {
+        elementorAutoSlideInterval = setInterval(elementorNextSlide, 5000);
+    }
+
+    function stopElementorAutoSlide() {
+        clearInterval(elementorAutoSlideInterval);
+    }
+
+    // Pause auto-slide on hover
+    if (elementorSlider) {
+        elementorSlider.addEventListener('mouseenter', stopElementorAutoSlide);
+        elementorSlider.addEventListener('mouseleave', startElementorAutoSlide);
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') elementorPreviousSlide();
+        if (e.key === 'ArrowRight') elementorNextSlide();
+    });
+
+    // Initialize
+    updateElementorSlidePositions();
+    startElementorAutoSlide();
+
+    // Handle window resize
+    let elementorResizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(elementorResizeTimeout);
+        elementorResizeTimeout = setTimeout(() => {
+            updateElementorSlidePositions();
+        }, 100);
+    });
+})();
+</script>
+
+<!-- 
+INSTALLATION INSTRUCTIONS:
+1. In WordPress Admin, go to your page/post with Elementor
+2. Edit with Elementor
+3. Add an HTML Widget from the General elements
+4. Copy and paste this ENTIRE code into the HTML Widget
+5. Click Update/Publish
+
+CUSTOMIZATION:
+- Replace image URLs with your own images
+- Modify titles and descriptions
+- Adjust colors in the CSS gradient background
+- Change auto-slide timing (currently 5 seconds)
+- Add or remove slides by duplicating the slide structure
+-->
